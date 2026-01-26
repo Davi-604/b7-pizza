@@ -6,3 +6,53 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Product {
+  id            Int             @id @default(autoincrement())
+  name          String
+  image         String          @default("default.jpg")
+  price         Decimal         @db.Money()
+  igredients    String?
+  orderProducts OrderProducts[]
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  
+  orders   Order[]
+}
+
+model Order {
+  id      Int         @id @default(autoincrement())
+  user_id Int
+  obs     String?
+  status  OrderStatus @default(INITIALIZED)
+
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+
+  user          User            @relation(fields: [user_id], references: [id])
+  orderProducts OrderProducts[]
+}
+
+enum OrderStatus {
+  INITIALIZED
+  IN_REVIEW
+  PAID
+  SENT
+  DELIVERED
+  CANCELED
+}
+
+model OrderProducts {
+  id         Int @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  quantity   Int @default(1)
+
+  order   Order   @relation(fields: [order_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+}
