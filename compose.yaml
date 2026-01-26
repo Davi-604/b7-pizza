@@ -12,9 +12,24 @@ services:
       WATCHPACK_POLLING: "true"
       WATCHPACK_POLLING_INTERVAL: "100"
       CHOKIDAR_USEPOLLING: "true"
+      DATABASE_URL: postgres://postgres:postgres@db:5432/b7_pizza
+    depends_on:
+      - db
     command: npm run dev -- --hostname 0.0.0.0
+
+  db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: b7_pizza
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   node_modules:
   next_cache:
+  postgres_data:
     
