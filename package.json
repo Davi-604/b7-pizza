@@ -9,13 +9,12 @@
     "lint": "eslint",
     "prisma:studio": "npx prisma studio --port 5555 --browser none"
   },
-  "prisma": {
-    "seed": "ts-node --esm prisma/seed.ts"
-  },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.3.0",
     "axios": "^1.13.2",
     "next": "16.1.1",
+    "pg": "^8.18.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "zustand": "^5.0.10"
@@ -30,7 +29,6 @@
     "eslint-config-next": "16.1.1",
     "prisma": "^7.3.0",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
