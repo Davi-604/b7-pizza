@@ -10,13 +10,9 @@ services:
       - next_cache:/app/.next
     environment:
       NODE_ENV: development
-      WATCHPACK_POLLING: "true"
-      WATCHPACK_POLLING_INTERVAL: "100"
-      CHOKIDAR_USEPOLLING: "true"
       DATABASE_URL: ${DATABASE_URL}
     depends_on:
       - db
-    command: npm run dev -- --hostname 0.0.0.0
 
   db:
     image: postgres:16
