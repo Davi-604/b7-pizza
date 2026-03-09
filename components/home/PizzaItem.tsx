@@ -17,7 +17,9 @@ export const PizzaItem = ({ data }: Props) => {
         cart.addItem({
             product_id: data.id,
             quantity: 1,
-        })
+        });
+
+        cart.setOpen(true);
     }
     
     return (

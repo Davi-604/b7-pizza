@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
+import { CartButton } from "../cart/CartButton"
 
 export const Header = () => {
     return (
@@ -15,9 +16,7 @@ export const Header = () => {
                 <Button>
                     Login / Cadastro
                 </Button>
-                <Button>
-                    Carrinho
-                </Button>
+                <CartButton />
             </div>
         </header>
     )
