@@ -1,10 +1,13 @@
-"use client"
-
 import Link from "next/link"
-import { Button } from "../ui/button"
 import { CartButton } from "../cart/CartButton"
+import { LoginButton } from "../login/LoginButton"
+import { cookies } from "next/headers"
 
-export const Header = () => {
+export const Header = async () => {
+    const cookie_store = await cookies();
+
+    const token = cookie_store.get('token');
+
     return (
         <header className="container mx-auto flex my-4 p-5 items-center justify-between bg-secondary rounded-md">
             <Link href="/">
@@ -13,9 +16,7 @@ export const Header = () => {
                 </div>
             </Link>
             <div className="flex gap-2">
-                <Button>
-                    Login / Cadastro
-                </Button>
+                <LoginButton initial_state={ token ? true : false }/>
                 <CartButton />
             </div>
         </header>
