@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const has = await hasEmail(email);
-    if (!has) return NextResponse.json({ 
+    if (has) return NextResponse.json({ 
         error: "E-mail já cadastrado no sistema" 
     });
 

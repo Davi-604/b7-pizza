@@ -47,10 +47,16 @@ export const createUser = async (name: string, email: string, password: string) 
 }
 
 export const createUserToken = async (user_id: number) => {
-    const token = v4();
+    try {
+        const token = v4();
 
-    await prisma.user.update({
-        where: { id: user_id },
-        data: { token }
-    })
+        await prisma.user.update({
+            where: { id: user_id },
+            data: { token: token }
+        })
+
+        return token
+    } catch (err) {
+        return false
+    }
 }

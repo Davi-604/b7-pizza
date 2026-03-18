@@ -15,3 +15,11 @@ export function decimalToMoney (price: string | number | Prisma.Decimal) {
             maximumFractionDigits: 2
           });
 }
+
+export function checkFieldError (field_name: string, errors: any) {
+  if (!errors) return false;
+
+  if (!errors[field_name]) return false;
+
+  return errors[field_name][0];
+}
