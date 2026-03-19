@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { decimalToMoney } from "@/lib/utils";
 import { CartProduct } from "./CartProduct";
 import { useAuth } from "@/stores/auth";
+import { auth_api } from "@/lib/axios";
 
 export const CartList = () => {
     const auth = useAuth();
@@ -30,7 +31,15 @@ export const CartList = () => {
         }
     }
 
-    useEffect(() => calculateSubtotal(), [cart])
+    useEffect(() => calculateSubtotal(), [cart]);
+
+    const handleFinishOrder = async () => {
+        if (cart.items.length <= 0) return;
+        
+        const req = await auth_api.post('/order/new', {
+            cart: cart.items
+        });
+    }
 
     return (
         <>
@@ -55,7 +64,7 @@ export const CartList = () => {
             </div>
             
             {auth.token && 
-                <Button className="bg-green-700 hover:bg-green-900">
+                <Button onClick={() => handleFinishOrder()} className="bg-green-700 hover:bg-green-900">
                     Finalizar Compra
                 </Button>
             } 
