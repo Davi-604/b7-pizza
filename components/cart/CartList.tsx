@@ -39,6 +39,10 @@ export const CartList = () => {
         const req = await auth_api.post('/order/new', {
             cart: cart.items
         });
+
+        if (req.status === 201) {
+            window.location.href = req.data.url
+        }
     }
 
     return (

@@ -1,8 +1,13 @@
+import { stripe } from "@/lib/stripe";
 import { getLoggedUserFromHeader } from "@/services/auth";
 import { createNewOrder } from "@/services/order";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+    const headers_list = await headers();
+    const origin_url = headers_list.get('origin');
+
     const { cart } = await request.json();
 
     const user = await getLoggedUserFromHeader();
@@ -21,9 +26,35 @@ export async function POST(request: Request) {
     if (!order) return NextResponse.json({
         success: false,
         message: "Ocorreu um erro ao criar o pedido"
+    });
+
+    const payment_items = [];
+    for(let item of order.orderProducts) {
+        payment_items.push({
+            price_data: {
+                currency: 'BRL',
+                unit_amount: parseFloat(item.product.price.toString()) * 100,
+                product_data: {
+                    name: item.product.name
+                }
+            },
+            quantity: item.quantity
+        })
+    }
+
+    const payment_session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        success_url: `${origin_url}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin_url}`,
+        line_items: payment_items,
+        metadata: {
+            order_id: order.id
+        }
     })
 
     return NextResponse.json({
-        success: true
-    });
+        success: true,
+        order,
+        url: payment_session.url
+    }, { status: 201 });
 }

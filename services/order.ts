@@ -30,6 +30,19 @@ export const createNewOrder = async (user_id: number, cart: CartItem[]) => {
                     data: order_products
                 }
             }
+        },
+        include: {
+            orderProducts: {
+                select: {
+                   quantity: true,
+                   product: {
+                        select: {
+                            name: true,
+                            price: true
+                        }
+                   } 
+                }
+            }
         }
     })
 
