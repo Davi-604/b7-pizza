@@ -47,6 +47,19 @@ export async function POST(request: Request) {
         success_url: `${origin_url}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin_url}`,
         line_items: payment_items,
+        customer_email: user.email,
+        shipping_options: [
+            {
+                shipping_rate_data: {
+                    type: 'fixed_amount',
+                    display_name: 'Frete padrão',
+                    fixed_amount: {
+                        currency: 'BRL',
+                        amount: 1000
+                    }
+                }
+            }
+        ],
         metadata: {
             order_id: order.id
         }
