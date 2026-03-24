@@ -1,36 +1,200 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍕 B7 Pizza - E-commerce com Next.js + Stripe
 
-## Getting Started
+## 📌 Sobre o projeto
 
-First, run the development server:
+Este projeto é um e-commerce simples de pizzaria desenvolvido com o objetivo de praticar conceitos modernos de desenvolvimento full stack, com foco principal em:
+
+* Integração de pagamentos com **Stripe**
+* Gerenciamento de estado com **Zustand**
+* Uso de **Next.js (App Router)**
+* Persistência de dados com **Prisma + PostgreSQL**
+* Execução via **Docker**
+
+A aplicação permite que o usuário navegue pelos produtos, adicione itens ao carrinho e finalize a compra utilizando checkout com Stripe.
+
+---
+
+## 🧠 Tecnologias utilizadas
+
+* Next.js
+* Prisma ORM
+* PostgreSQL
+* Stripe
+* Zustand
+* Docker
+
+---
+
+## ⚙️ Como rodar o projeto localmente
+
+### 🔧 Pré-requisitos
+
+* Node.js (recomendado usar via WSL no Windows)
+* Docker (opcional, mas recomendado)
+* NPM ou Yarn
+
+---
+
+## 🚀 Rodando de forma local
+
+### 1. Clone o projeto
+
+```bash
+git clone <url-do-repositorio>
+cd b7-pizza
+```
+
+---
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+---
+
+### 3. Configure o arquivo `.env`
+
+Crie um arquivo `.env` na raiz do projeto com base no exemplo:
+
+```env
+DATABASE_URL="postgres://postgres:postgres@localhost:5432/b7_pizza?schema=public"
+
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=b7_pizza
+
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+STRIPE_WEBHOOK_SECRET="your_webhook_key"
+STRIPE_API_KEY="your_api_stripe_key"
+STRIPE_SECRET_KEY="your_secret_stripe_key"
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="your_publishable_stripe_key"
+```
+
+---
+
+### 4. Rode as migrations
+
+```bash
+npx prisma migrate dev
+```
+
+---
+
+### 5. Popule o banco com dados de teste
+
+```bash
+npx prisma db seed
+```
+
+---
+
+### 6. Inicie o projeto
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A aplicação estará disponível em:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 💳 Rodando o Stripe localmente (Webhook)
 
-To learn more about Next.js, take a look at the following resources:
+Para que o fluxo de pagamento funcione corretamente em ambiente local, é necessário rodar o listener de webhook do Stripe.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Instale o Stripe CLI
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+curl -s https://packages.stripe.com/install.sh | sudo bash
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2. Faça login no Stripe
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+stripe login
+```
+
+---
+
+### 3. Inicie o listener de webhook
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhook
+```
+
+---
+
+### 4. Copie o webhook secret gerado
+
+Após rodar o comando acima, será exibido:
+
+```
+whsec_xxxxxxxxx
+```
+
+Adicione esse valor no `.env`:
+
+```env
+STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxx
+```
+
+---
+
+## 🐳 Rodando com Docker
+
+### 1. Suba os containers
+
+```bash
+docker compose up --build
+```
+
+---
+
+### 2. Execute as migrations
+
+```bash
+docker compose exec web npx prisma migrate dev
+```
+
+---
+
+### 3. Execute o seed
+
+```bash
+docker compose exec web npx prisma db seed
+```
+
+---
+
+## 🛒 Funcionalidades
+
+* Listagem de pizzas
+* Carrinho de compras
+* Autenticação simples
+* Checkout com Stripe
+* Criação de pedidos
+* Persistência de dados com Prisma
+
+---
+
+## 📦 Gerenciamento de estado
+
+O projeto utiliza **Zustand** para:
+
+* Controle de autenticação do usuário
+* Gerenciamento do carrinho de compras
+
+---
+
+## 📄 Licença
+
+Este projeto é apenas para fins de estudo baseado no curso da B7Web.
