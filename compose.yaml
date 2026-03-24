@@ -26,6 +26,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  stripe:
+    image: stripe/stripe-cli
+    command: listen --forward-to web:3000/api/webhook/stripe
+    env_file:
+      - .env
+    depends_on:
+      - web
+
 volumes:
   node_modules:
   next_cache:
